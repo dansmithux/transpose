@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIDI Transposer & Tempo Changer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            clifford: "#da373d",
+          },
+        },
+      },
+    }
+  </script>
+  <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+</head>
+<body class="bg-slate-100 flex items-center justify-center h-screen">
+
+  <div class="bg-white p-10 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold mb-8">MIDI Transposer & Tempo Changer</h1>
+
+    <form method="post" enctype="multipart/form-data" id="form">
+      <label for="file" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          Select a .MID or .MIDI file
+        </label>
+      <div class="bg-gray-200 rounded p-4">
+        <input type="file" name="file" id="file" class="block w-full text-sm text-gray-500"/>
+      </div>
+
+      <div class="w-full mt-5">
+        <label for="semitones" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          Transpose by half steps
+        </label>
+        <div class="flex items-center justify-center">
+          <div class="w-1/2 pr-4">
+            <div class="inline-flex items-center mr-4">
+                <input checked id="radio_down" type="radio" value="down" name="radio_up_down" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="radio_down" class="ms-2 text-sm font-medium text-gray-700">Down (&minus;)</label>
+            </div>
+            <div class="inline-flex items-center">
+                <input id="radio_up" type="radio" value="up" name="radio_up_down" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="radio_up" class="ms-2 text-sm font-medium text-gray-700">Up (+)</label>
+            </div>
+          </div>
+          <div class="w-1/2 relative">
+            <select name="semitones" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="semitones">
+              <option value="0" selected>0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="12">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full mt-5">
+        <label for="tempo_multiplier" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          Change tempo
+        </label>
+        <div class="relative">
+          <select name="tempo_multiplier" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="tempo_multiplier">
+
+            <option value="0.25">0.25&times; (1/4)</option>
+            <option value="0.5">0.5&times; (1/2)</option>
+            <option value="0.666">0.666&times; (2/3)</option>
+            <option value="0.75">0.75&times; (3/4)</option>
+            <option value="0.875">0.875&times; (7/8)</option>
+            <option value="1.0" selected>1.0&times;</option>
+            <option value="1.125">1.125&times; (9/8)</option>
+            <option value="1.25">1.25&times; (5/4)</option>
+            <option value="1.333">1.333&times; (4/3)</option>
+            <option value="1.5">1.5&times; (3/2)</option>
+            <option value="2.0">2&times;</option>
+
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full mt-9">
+        <input type="submit" value="Download" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded cursor-pointer">
+      </div>
+    </form>
+  </div>
+
+  <div class="fixed bottom-0 py-3">
+    <p class="text-gray-500">&copy; 2024 <a href="https://dansmithux.com" target="_blank" class="hover:underline">Dan Smith</a></p>
+  </div>
+
+<script>
+// Wait for the DOM to be loaded
+document.addEventListener("DOMContentLoaded", function(event) {
+    // Get the form element
+    var form = document.getElementById('form');
+
+    // Add a submit event listener to the form
+    form.addEventListener('submit', function(e) {
+        // Prevent the default form submission
+        e.preventDefault();
+
+        // Get the file input element
+        var fileInput = document.getElementById('file');
+
+        // Check if a file has been selected
+        if (fileInput.files.length === 0) {
+            alert('No file selected. Please select a file before submitting.');
+            return; // Exit the function if no file is selected
+        }
+
+        form.submit();
+    });
+});
+</script>
+
+</body>
+</html>
